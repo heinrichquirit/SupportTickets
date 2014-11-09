@@ -1,4 +1,4 @@
-package main.java.net.bigbadcraft.supporttickets;
+package main.java.net.bigbadcraft.supporttickets.utils;
 
 public enum Level {
 

@@ -1,5 +1,7 @@
 package main.java.net.bigbadcraft.supporttickets;
 
+import main.java.net.bigbadcraft.supporttickets.utils.TicketStatus;
+
 public class Ticket {
 
 	private int ticketId;
@@ -12,7 +14,7 @@ public class Ticket {
 		ticketId = id;
 		requester = r;
 		message = m;
-		handler = h;
+		setHandler(h);
 		setStatus(s);
 	}
 	
@@ -28,6 +30,10 @@ public class Ticket {
 		return message;
 	}
 	
+	public void setHandler(String handler) {
+		this.handler = handler;
+	}
+
 	public String getHandler() {
 		return handler;
 	}
