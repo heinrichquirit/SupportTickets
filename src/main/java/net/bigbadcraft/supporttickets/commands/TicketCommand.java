@@ -3,6 +3,7 @@ package main.java.net.bigbadcraft.supporttickets.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.net.bigbadcraft.supporttickets.QueueManager;
 import main.java.net.bigbadcraft.supporttickets.utils.Level;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
 import PluginReference.ChatColor;
@@ -13,9 +14,11 @@ import SupportTickets.MyPlugin;
 public class TicketCommand implements MC_Command {
 
 	private MyPlugin p;
+	private QueueManager q;
 	
 	public TicketCommand(MyPlugin plugin) {
 		p = plugin;
+		q = p.queue;
 	}
 	
 	public List<String> getAliases() {
@@ -51,10 +54,20 @@ public class TicketCommand implements MC_Command {
 		}
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("show")) {
-				p.queue.displayTickets(player);
+				q.displayTickets(player);
 			}
 			if (args[0].equalsIgnoreCase("request")) {
-				Util.makeMessage(player, ChatColor.RED + "Incorrect syntax, usage: /ticket request <message>");
+				Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket request <message>");
+			}
+		}
+		if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("select")) {
+				int id = Util.parseInt(args[1]);
+				if (!q.contains(id)) {
+					Util.msg(player, ChatColor.RED + "Ticket with that ID does not exist.");
+					return;
+				}
+				q.showDetails(player, id);
 			}
 		}
 		if (args.length > 1) {

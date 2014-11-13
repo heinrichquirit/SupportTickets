@@ -11,52 +11,81 @@ import PluginReference.MC_Player;
 
 public class QueueManager {
 
-	private final String G = ChatColor.GREEN;
-	private final String Y = ChatColor.YELLOW;
+	private final String B = ChatColor.DARK_AQUA;
+	private final String W = ChatColor.WHITE;
 	
 	private List<Ticket> tickets = new ArrayList<Ticket>();
 	
 	public void addTicket(Ticket t) {
-		tickets.add(t);
+		if (!tickets.contains(t)) {
+			tickets.add(t);
+		}
 	}
 	
 	public void removeTicket(int id) {
-		tickets.remove(id);
+		if (contains(id)) { 
+			tickets.remove(id);
+		}
+	}
+	
+	public boolean contains(int ticketId) {
+		return tickets.contains(tickets.get(ticketId));
+	}
+	
+	public void handleTicket(int ticketId, MC_Player staff) {
+		if (contains(ticketId)) {
+			Ticket t = getTicket(ticketId);
+			t.setHandler(staff.getName());
+			t.setStatus(TicketStatus.PENDING);
+			Util.msg(staff, W + "You have selected " + B + t.getRequester() + W + " ticket.");
+		}
 	}
 	
 	public void displayTickets(MC_Player player) {
-		player.sendMessage(Y + "---------- " + G + "SupportTickets " + Y + " (" + G + tickets.size() + Y + ") ----------");
+		Util.msg(player, W + "---------- " + B + "SupportTickets " + W + " (" + B + tickets.size() + W + ") ----------");
 		for (Ticket t : tickets) {
-			player.sendMessage(Y + "(" + G + t.getId() + Y + ") " + t.getRequester() + ": " + t.getMessage());
+			player.sendMessage(W + "(" + B + t.getId() + W +") " + t.getRequester() + ": " + t.getMessage());
 		}
 	}
 	
-	/*  Fix this */
-	public int getTotalTickets(String name) {
-		List<Ticket> playerTickets = new ArrayList<Ticket>();
+	public Ticket getTicket(int ticketId) {
+		Ticket ticket = null;
+		if (!contains(ticketId)) return ticket; // Return null;
 		for (Ticket t : tickets) {
-			if (t.getRequester().equals(name)) {
-				playerTickets.add(t);
+			if (t.getId() == ticketId) {
+				ticket = new Ticket(t.getId(), t.getRequester(), t.getMessage(), t.getHandler(), t.getStatus());
 			}
 		}
-		for (Ticket t : playerTickets) {
-			
+		return ticket;
+	}
+	
+	public List<Ticket> getPlayerTickets(MC_Player player) {
+		List<Ticket> temp = new ArrayList<Ticket>();
+		for (Ticket t : tickets) {
+			if (t.getRequester().equals(player.getName())) {
+				temp.add(t);
+			}
 		}
-		return Collections.frequency(playerTickets, name);
+		if (temp.size() == 0) {
+			return null;
+		}
+		return temp;
+	}
+	
+	public int getTotalTickets() {
+		return tickets.size();
+	}
+	
+	public int getTotalTickets(MC_Player player) {
+		return getPlayerTickets(player).size();
 	}
 	
 	/*
 	 * Gets the player's earliest ticket id
 	 */
-	public int getEarly(String name) {
-		List<Ticket> playerTickets = new ArrayList<Ticket>();
-		for (Ticket t : tickets) {
-			if (t.getRequester().equals(name)) {
-				playerTickets.add(t);
-			}
-		}
+	public int getEarly(MC_Player player) {
 		List<Integer> ids = new ArrayList<Integer>();
-		for (Ticket t : playerTickets) {
+		for (Ticket t : getPlayerTickets(player)) {
 			ids.add(t.getId());
 		}
 		return ids.get(ids.indexOf(Collections.min(ids)));
@@ -65,15 +94,9 @@ public class QueueManager {
 	/*
 	 * Gets the player's latest ticket id
 	 */
-	public int getLate(String name) {
-		List<Ticket> playerTickets = new ArrayList<Ticket>();
-		for (Ticket t : tickets) {
-			if (t.getRequester().equals(name)) {
-				playerTickets.add(t);
-			}
-		}
+	public int getLate(MC_Player player) {
 		List<Integer> ids = new ArrayList<Integer>();
-		for (Ticket t : playerTickets) {
+		for (Ticket t : getPlayerTickets(player)) {
 			ids.add(t.getId());
 		}
 		return ids.get(ids.indexOf(Collections.max(ids)));
@@ -83,12 +106,26 @@ public class QueueManager {
 		return tickets.size();
 	}
 	
-	public void showDetails(int ticketId) {
-		
+	public void showDetails(MC_Player player, int ticketId) {
+		player.sendMessage(W + "---------- " + B + "SupportTickets" + W + "[" + B + "ID: " + ticketId + W + "] ----------");
+		Ticket t = getTicket(ticketId);
+		player.sendMessage(B + "Requester" + W + ": " + t.getRequester());
+		player.sendMessage(B + "Message" + W + ": " + t.getMessage());
+		player.sendMessage(B + "Handler" + W + ": " + t.getHandler());
+		player.sendMessage(B + "Status: " + W + ": " + t.getStatus());
 	}
 	
-	public void showTickets(TicketStatus status) {
-		
+	public void showTickets(MC_Player player, TicketStatus status) {
+		List<Ticket> filter = new ArrayList<Ticket>();
+		for (Ticket t : tickets) {
+			if (t.getStatus() == status) {
+				filter.add(t);
+			}
+		}
+		player.sendMessage(W + "---------- " + B + "SupportTickets " + W + " [" + B + "Status: Claimed" + W + "] ----------");
+		for (Ticket t : filter) {
+			player.sendMessage(W + "(" + B + t.getId() + W + ") " + t.getRequester() + ": " + t.getMessage());
+		}
 	}
 	
 }

@@ -7,7 +7,7 @@ import PluginReference.MC_Player;
 
 public class Util {
 
-	public static void makeMessage(MC_Player player, String message) {
+	public static void msg(MC_Player player, String message) {
 		player.sendMessage(message);
 	}
 	
@@ -49,6 +49,15 @@ public class Util {
 			}
 		}
 		return sb.toString();
+	}
+	
+	public static int parseInt(String s) {
+		int value = 0;
+		try {
+			return value = Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return value;
+		}
 	}
 	
 }

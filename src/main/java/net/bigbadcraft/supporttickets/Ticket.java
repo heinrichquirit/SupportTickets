@@ -4,14 +4,22 @@ import main.java.net.bigbadcraft.supporttickets.utils.TicketStatus;
 
 public class Ticket {
 
-	private int ticketId;
+	private int id;
 	private String requester;
 	private String message;
 	private String handler;
 	private TicketStatus status;
 	
-	public Ticket(int id, String r, String m, String h, TicketStatus s) {
-		ticketId = id;
+	public Ticket() {
+		id = 0;
+		requester = null;
+		message = null;
+		handler = null;
+		status = null;
+	}
+	
+	public Ticket(int ticketId, String r, String m, String h, TicketStatus s) {
+		id = ticketId;
 		requester = r;
 		message = m;
 		setHandler(h);
@@ -19,7 +27,7 @@ public class Ticket {
 	}
 	
 	public int getId() {
-		return ticketId;
+		return id;
 	}
 	
 	public String getRequester() {
