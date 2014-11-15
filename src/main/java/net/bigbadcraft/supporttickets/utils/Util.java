@@ -2,6 +2,9 @@ package main.java.net.bigbadcraft.supporttickets.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 import PluginReference.MC_Player;
 
@@ -23,6 +26,15 @@ public class Util {
 		if (!f.exists()) {
 			f.mkdirs();
 		}
+	}
+	
+	public static boolean isValidStatus(String ticketStatus) {
+		EnumSet<TicketStatus> status = EnumSet.of(TicketStatus.CLOSED, TicketStatus.OPEN, TicketStatus.PENDING, TicketStatus.REOPENED);
+		List<String> temp = new ArrayList<String>();
+		for (TicketStatus ts : status) {
+			temp.add(ts.toString());
+		}
+		return temp.contains(ticketStatus);
 	}
 	
 	public static void makeFile(File f) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.java.net.bigbadcraft.supporttickets.QueueManager;
 import main.java.net.bigbadcraft.supporttickets.utils.Level;
+import main.java.net.bigbadcraft.supporttickets.utils.Permission;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
 import PluginReference.ChatColor;
 import PluginReference.MC_Command;
@@ -54,25 +55,47 @@ public class TicketCommand implements MC_Command {
 		}
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("show")) {
+				// for debugging purposes
 				q.displayTickets(player);
 			}
 			if (args[0].equalsIgnoreCase("request")) {
-				Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket request <message>");
+				if (Util.checkPermission(player, Permission.PLAYER_REQUEST)) {
+					Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket request <message>");
+				}
+			}
+			if (args[0].equalsIgnoreCase("check")) {
+				if (Util.checkPermission(player, Permission.PLAYER_CHECK)) {
+					new CheckCommand(p).execute(player, args);
+				}
+			}
+			if (args[0].equalsIgnoreCase("select")) {
+				if (Util.checkPermission(player, Permission.MODERATOR_SELECT)) {
+					Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket select <id>");
+				}
+			}
+			if (args[0].equalsIgnoreCase("list")) {
+				if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
+					Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket list <Open|Pending|Re-Opened|Closed>");
+				}
 			}
 		}
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("select")) {
-				int id = Util.parseInt(args[1]);
-				if (!q.contains(id)) {
-					Util.msg(player, ChatColor.RED + "Ticket with that ID does not exist.");
-					return;
+				if (Util.checkPermission(player, Permission.MODERATOR_SELECT)) {
+					new SelectCommand(p).execute(player, args);
 				}
-				q.showDetails(player, id);
+			}
+			if (args[0].equalsIgnoreCase("list")) {
+				if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
+					new ListCommand(p).execute(player, args);
+				}
 			}
 		}
 		if (args.length > 1) {
 			if (args[0].equalsIgnoreCase("request")) {
-				new RequestCommand(p).execute(player, args);
+				if (Util.checkPermission(player, Permission.PLAYER_REQUEST)) {
+					new RequestCommand(p).execute(player, args);
+				}
 			}
 		}
 	}

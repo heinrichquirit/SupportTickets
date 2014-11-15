@@ -72,6 +72,10 @@ public class QueueManager {
 		return temp;
 	}
 	
+	public boolean hasTicket(MC_Player player) {
+		return getPlayerTickets(player).size() > 0;
+	}
+	
 	public int getTotalTickets() {
 		return tickets.size();
 	}
