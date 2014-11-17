@@ -154,12 +154,20 @@ public class QueueManager {
 		}
 		player.sendMessage(W + "---------- " + B + "SupportTickets " + W + " [" + B + "Status: " + status + W + "] ----------");
 		for (Ticket t : filter) {
-			player.sendMessage(W + "(" + B + t.getId() + W + ") " + t.getRequester() + ": " + t.getMessage());
+			player.sendMessage(W + "(" + B + t.getId() + W + ") " + B + t.getRequester() + W + ": " + t.getMessage());
 		}
 	}
 	
 	public void removeTicket(int ticketId) {
 		pendingTickets.remove(ticketId);
+	}
+	
+	public List<Ticket> getQueuedTickets() {
+		return tickets;
+	}
+	
+	public List<Ticket> getPendingTickets() {
+		return pendingTickets;
 	}
 	
 	/* Methods for pendingTickets list */

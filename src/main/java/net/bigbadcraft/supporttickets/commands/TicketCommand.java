@@ -35,7 +35,13 @@ public class TicketCommand implements MC_Command {
 	}
 
 	@Override
-	public String getHelpLine(MC_Player arg0) {
+	public String getHelpLine(MC_Player player) {
+		
+		// if player is moderator 
+		  // display moderator commands
+		// else if player is admin
+		  // display admin commands
+		
 		return R + "Incorrect syntax, usage: /ticket";
 	}
 
@@ -85,6 +91,16 @@ public class TicketCommand implements MC_Command {
 					Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
 				}
 			}
+			if (args[0].equalsIgnoreCase("staff")) {
+				if (Util.checkPermission(player, Permission.ADMIN_PROGRESS_CHECK)) {
+					new StaffCommand(p).execute(player, args);
+				}
+			}
+			if (args[0].equalsIgnoreCase("override")) {
+				if (Util.checkPermission(player, Permission.ADMIN_OVERRIDE)) {
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket override <id> <status>");
+				}
+			}
 		}
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("select")) {
@@ -102,11 +118,21 @@ public class TicketCommand implements MC_Command {
 					Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
 				}
 			}
+			if (args[0].equalsIgnoreCase("override")) {
+				if (Util.checkPermission(player, Permission.ADMIN_OVERRIDE)) {
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket override <id> <status>");
+				}
+			}
 		}
 		if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("change")) {
 				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
 					new ChangeCommand(p).execute(player, args);
+				}
+			}
+			if (args[0].equalsIgnoreCase("override")) {
+				if (Util.checkPermission(player, Permission.ADMIN_OVERRIDE)) {
+					new OverrideCommand(p).execute(player, args);
 				}
 			}
 		}
