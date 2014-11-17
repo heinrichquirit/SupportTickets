@@ -14,6 +14,8 @@ import SupportTickets.MyPlugin;
 
 public class TicketCommand implements MC_Command {
 
+	private final String R = ChatColor.RED;
+	
 	private MyPlugin p;
 	private QueueManager q;
 	
@@ -34,7 +36,7 @@ public class TicketCommand implements MC_Command {
 
 	@Override
 	public String getHelpLine(MC_Player arg0) {
-		return ChatColor.RED + "Incorrect syntax, usage: /ticket";
+		return R + "Incorrect syntax, usage: /ticket";
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public class TicketCommand implements MC_Command {
 			}
 			if (args[0].equalsIgnoreCase("request")) {
 				if (Util.checkPermission(player, Permission.PLAYER_REQUEST)) {
-					Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket request <message>");
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket request <message>");
 				}
 			}
 			if (args[0].equalsIgnoreCase("check")) {
@@ -70,12 +72,17 @@ public class TicketCommand implements MC_Command {
 			}
 			if (args[0].equalsIgnoreCase("select")) {
 				if (Util.checkPermission(player, Permission.MODERATOR_SELECT)) {
-					Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket select <id>");
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket select <id>");
 				}
 			}
 			if (args[0].equalsIgnoreCase("list")) {
 				if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
-					Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket list <Open|Pending|Re-Opened|Closed>");
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket list <Open|Pending|Re-Opened|Closed>");
+				}
+			}
+			if (args[0].equalsIgnoreCase("change")) {
+				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
 				}
 			}
 		}
@@ -88,6 +95,18 @@ public class TicketCommand implements MC_Command {
 			if (args[0].equalsIgnoreCase("list")) {
 				if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
 					new ListCommand(p).execute(player, args);
+				}
+			}
+			if (args[0].equalsIgnoreCase("change")) {
+				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
+					Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
+				}
+			}
+		}
+		if (args.length == 3) {
+			if (args[0].equalsIgnoreCase("change")) {
+				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
+					new ChangeCommand(p).execute(player, args);
 				}
 			}
 		}

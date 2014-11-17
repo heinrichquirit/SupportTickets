@@ -15,16 +15,28 @@ public class QueueManager {
 	private final String W = ChatColor.WHITE;
 	
 	private List<Ticket> tickets = new ArrayList<Ticket>();
+	private List<Ticket> pendingTickets = new ArrayList<Ticket>();
 	
-	public void addTicket(Ticket t) {
+	public void queue(Ticket t) {
 		if (!tickets.contains(t)) {
 			tickets.add(t);
 		}
 	}
 	
-	public void removeTicket(int id) {
+	public void dequeue(int id) {
 		if (contains(id)) { 
 			tickets.remove(id);
+		}
+	}
+	
+	public void pend(Ticket t) {
+		dequeue(t.getId());
+		pendingTickets.add(t);
+	}
+	
+	public void unpend(int id) {
+		if (pendingTickets.contains(pendingTickets.get(id))) {
+			pendingTickets.remove(id);
 		}
 	}
 	
@@ -34,7 +46,7 @@ public class QueueManager {
 	
 	public void handleTicket(int ticketId, MC_Player staff) {
 		if (contains(ticketId)) {
-			Ticket t = getTicket(ticketId);
+			Ticket t = getQueuedTicket(ticketId);
 			t.setHandler(staff.getName());
 			t.setStatus(TicketStatus.PENDING);
 			Util.msg(staff, W + "You have selected " + B + t.getRequester() + W + " ticket.");
@@ -48,10 +60,24 @@ public class QueueManager {
 		}
 	}
 	
-	public Ticket getTicket(int ticketId) {
+	/*
+	 * Gets the specified ticket from tickets list
+	 */
+	public Ticket getQueuedTicket(int ticketId) {
 		Ticket ticket = null;
 		if (!contains(ticketId)) return ticket; // Return null;
 		for (Ticket t : tickets) {
+			if (t.getId() == ticketId) {
+				ticket = new Ticket(t.getId(), t.getRequester(), t.getMessage(), t.getHandler(), t.getStatus());
+			}
+		}
+		return ticket;
+	}
+	
+	public Ticket getPendingTicket(int ticketId) {
+		Ticket ticket = null;
+		if (!pendingTickets.contains(pendingTickets.get(ticketId))) return null;
+		for (Ticket t : pendingTickets) {
 			if (t.getId() == ticketId) {
 				ticket = new Ticket(t.getId(), t.getRequester(), t.getMessage(), t.getHandler(), t.getStatus());
 			}
@@ -112,7 +138,7 @@ public class QueueManager {
 	
 	public void showDetails(MC_Player player, int ticketId) {
 		player.sendMessage(W + "---------- " + B + "SupportTickets" + W + "[" + B + "ID: " + ticketId + W + "] ----------");
-		Ticket t = getTicket(ticketId);
+		Ticket t = getQueuedTicket(ticketId);
 		player.sendMessage(B + "Requester" + W + ": " + t.getRequester());
 		player.sendMessage(B + "Message" + W + ": " + t.getMessage());
 		player.sendMessage(B + "Handler" + W + ": " + t.getHandler());
@@ -126,9 +152,52 @@ public class QueueManager {
 				filter.add(t);
 			}
 		}
-		player.sendMessage(W + "---------- " + B + "SupportTickets " + W + " [" + B + "Status: Claimed" + W + "] ----------");
+		player.sendMessage(W + "---------- " + B + "SupportTickets " + W + " [" + B + "Status: " + status + W + "] ----------");
 		for (Ticket t : filter) {
 			player.sendMessage(W + "(" + B + t.getId() + W + ") " + t.getRequester() + ": " + t.getMessage());
+		}
+	}
+	
+	public void removeTicket(int ticketId) {
+		pendingTickets.remove(ticketId);
+	}
+	
+	/* Methods for pendingTickets list */
+	
+	public void pendTicket(MC_Player player, int ticketId) {
+		Ticket t = getQueuedTicket(ticketId);
+		pend(t);
+		t.setHandler(player.getName());
+		t.setStatus(TicketStatus.PENDING);
+		Util.msg(player, "You are now handling " + B + t.getRequester() + "'s " + W + "ticket."); 
+	}
+	
+	public void changeStatus(MC_Player staff, Ticket ticket, TicketStatus status) {
+		switch(status) {
+		case OPEN:
+			ticket.setStatus(status);
+			unpend(ticket.getId());
+			queue(ticket);
+			Util.msg(staff, "You have set this ticket to " + B + status);
+			break;
+		case PENDING:
+			ticket.setStatus(status);
+			dequeue(ticket.getId());
+			pend(ticket);
+			Util.msg(staff, "You have set this ticket to " + B + status);
+			break;
+		case REOPENED:
+			ticket.setStatus(status);
+			unpend(ticket.getId());
+			queue(ticket);
+			Util.msg(staff, "You have set this ticket to " + B + status);
+			break;
+		case CLOSED:
+			ticket.setStatus(status);
+			dequeue(ticket.getId());
+			unpend(ticket.getId());
+			Util.msg(staff, "You have set this ticket to " + B + status);
+			break;
 		}
 	}
 	

@@ -25,7 +25,7 @@ public class RequestCommand extends BaseCommand {
 			Util.msg(player, ChatColor.RED + "You have reached the total of tickets you can create.");
 		}
 		Ticket t = new Ticket(q.getTicketCount() == 0 ? 1 : q.getTicketCount() + 1, name, message, "none", TicketStatus.OPEN);
-		q.addTicket(t);
+		q.queue(t);
 		Util.msg(player, ChatColor.YELLOW + "You have submitted your ticket. ID Reference: " + ChatColor.GREEN + t.getId());
 	}
 

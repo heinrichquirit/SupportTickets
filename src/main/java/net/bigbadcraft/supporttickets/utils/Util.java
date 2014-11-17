@@ -63,6 +63,14 @@ public class Util {
 		return sb.toString();
 	}
 	
+	public static boolean isNumber(String s) {
+		int value = Util.parseInt(s);
+		if (value > 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static int parseInt(String s) {
 		int value = 0;
 		try {
