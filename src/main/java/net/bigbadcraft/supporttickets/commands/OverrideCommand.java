@@ -20,16 +20,16 @@ public class OverrideCommand extends BaseCommand {
 	public void execute(MC_Player player, String[] args) {
 		int id = 0;
 		TicketStatus status = null;
-		if (!Util.isNumber(args[2])) {
+		if (!Util.isNumber(args[1])) {
 			Util.msg(player, R + "You must enter a valid ticket id.");
 			return;
 		}
-		if (!Util.isValidStatus(args[3])) {
+		if (!Util.isValidStatus(args[2])) {
 			Util.msg(player, R + "Status must be one of the following - Open|Pending|Re-Opened|Closed");
 			return;
 		}
-		id = Util.parseInt(args[2]);
-		status = TicketStatus.valueOf(args[3]);
+		id = Util.parseInt(args[1]);
+		status = TicketStatus.valueOf(args[2]);
 		Ticket t = p.queue.getPendingTicket(id);
 		p.queue.changeStatus(player, t, status);
 	}

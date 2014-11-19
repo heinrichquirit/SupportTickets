@@ -15,7 +15,7 @@ public class ListCommand extends BaseCommand {
 	}
 	
 	public void execute(MC_Player player, String[] args) {
-		String status = args[2];
+		String status = args[1];
 		if (!Util.isValidStatus(status)) {
 			Util.msg(player, ChatColor.RED + "Status must be one of the following - Open|Pending|Re-Opened|Closed");
 			return;

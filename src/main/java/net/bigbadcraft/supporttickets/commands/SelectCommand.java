@@ -17,7 +17,7 @@ public class SelectCommand extends BaseCommand {
 	}
 	
 	public void execute(MC_Player player, String[] args) {
-		int id = Util.parseInt(args[1]);
+		int id = Util.parseInt(args[0]);
 		if (!p.queue.contains(id)) {
 			Util.msg(player, ChatColor.RED + "Ticket with that ID does not exist.");
 			return;

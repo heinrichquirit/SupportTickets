@@ -21,11 +21,11 @@ public class RequestCommand extends BaseCommand {
 	public void execute(MC_Player player, String[] args) {
 		String name = player.getName();
 		String message = Util.join(1, args);
+		Ticket t = new Ticket(q.getTicketCount() == 0 ? 1 : q.getTicketCount() + 1, name, message, "none", TicketStatus.OPEN);
+		q.queue(t);
 		if (q.getTotalTickets(player) == Integer.parseInt(p.conf.getValue(MyPlugin.TICKET_LIMITER))) {
 			Util.msg(player, ChatColor.RED + "You have reached the total of tickets you can create.");
 		}
-		Ticket t = new Ticket(q.getTicketCount() == 0 ? 1 : q.getTicketCount() + 1, name, message, "none", TicketStatus.OPEN);
-		q.queue(t);
 		Util.msg(player, ChatColor.YELLOW + "You have submitted your ticket. ID Reference: " + ChatColor.GREEN + t.getId());
 	}
 
