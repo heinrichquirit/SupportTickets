@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import PluginReference.ChatColor;
 import PluginReference.MC_Player;
 
 public class Util {
 
+	private static final String B = ChatColor.DARK_AQUA;
+	private static final String W = ChatColor.WHITE;
+	
 	public static void msg(MC_Player player, String message) {
 		player.sendMessage(message);
 	}
@@ -81,7 +85,16 @@ public class Util {
 		}
 	}
 
-	public EnumSet<Permission> getPluginPermissions() {
+	public static void sendHelpMenu(MC_Player player) {
+		msg(player, "Here are the " + B + "available" + W + " commands.");
+		for (Permission permission : getPluginPermissions()) {
+			if (player.hasPermission(permission.toString())) {
+				msg(player, B + permission.getSyntax() + W + " - " + permission.getDescription());
+			}
+		}
+	}
+	
+	public static EnumSet<Permission> getPluginPermissions() {
 		EnumSet<Permission> perms = EnumSet.of(Permission.PLAYER_USE,
 				Permission.PLAYER_REQUEST, Permission.PLAYER_CHECK,
 				Permission.MODERATOR_SELECT, Permission.MODERATOR_LIST,

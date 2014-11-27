@@ -1,11 +1,10 @@
 package main.java.net.bigbadcraft.supporttickets.commands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import main.java.net.bigbadcraft.supporttickets.QueueManager;
 import main.java.net.bigbadcraft.supporttickets.utils.Level;
-import main.java.net.bigbadcraft.supporttickets.utils.Permission;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
 import PluginReference.ChatColor;
 import PluginReference.MC_Command;
@@ -15,13 +14,29 @@ import SupportTickets.MyPlugin;
 public class TicketCommand implements MC_Command {
 
 	private final String R = ChatColor.RED;
+	private HashMap<String, BaseCommand> commands = new HashMap<String, BaseCommand>();
+	
+	/* Sub command instances */
+	private ChangeCommand change;
+	private CheckCommand check;
+	private ListCommand list;
+	private OverrideCommand override;
+	private RequestCommand request;
+	private SelectCommand select;
+	private StaffCommand staff;
 	
 	private MyPlugin p;
-	private QueueManager q;
 	
 	public TicketCommand(MyPlugin plugin) {
 		p = plugin;
-		q = p.queue;
+		change = new ChangeCommand(p);
+		check = new CheckCommand(p);
+		list = new ListCommand(p);
+		override = new OverrideCommand(p);
+		request = new RequestCommand(p);
+		select = new SelectCommand(p);
+		staff = new StaffCommand(p);
+		loadCommands();
 	}
 	
 	public List<String> getAliases() {
@@ -36,13 +51,7 @@ public class TicketCommand implements MC_Command {
 
 	@Override
 	public String getHelpLine(MC_Player player) {
-		
-		// if player is moderator 
-		  // display moderator commands
-		// else if player is admin
-		  // display admin commands
-		
-		return R + "Incorrect syntax, usage: /ticket";
+		return null;
 	}
 
 	@Override
@@ -58,91 +67,14 @@ public class TicketCommand implements MC_Command {
 			return;
 		}
 		if (args.length <= 0) {
-			player.sendMessage(getHelpLine(player));
+			Util.sendHelpMenu(player);
+		}
+		String sub = args[1];
+		if (!commands.containsKey(sub)) {
+			Util.msg(player, R + sub + " command does not exist!");
 			return;
 		}
-		if (args.length == 1) {
-			if (args[0].equalsIgnoreCase("show")) {
-				// for debugging purposes
-				q.displayTickets(player);
-			}
-			if (args[0].equalsIgnoreCase("request")) {
-				if (Util.checkPermission(player, Permission.PLAYER_REQUEST)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket request <message>");
-				}
-			}
-			if (args[0].equalsIgnoreCase("check")) {
-				if (Util.checkPermission(player, Permission.PLAYER_CHECK)) {
-					new CheckCommand(p).execute(player, args);
-				}
-			}
-			if (args[0].equalsIgnoreCase("select")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_SELECT)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket select <id>");
-				}
-			}
-			if (args[0].equalsIgnoreCase("list")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket list <Open|Pending|Re-Opened|Closed>");
-				}
-			}
-			if (args[0].equalsIgnoreCase("change")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
-				}
-			}
-			if (args[0].equalsIgnoreCase("staff")) {
-				if (Util.checkPermission(player, Permission.ADMIN_PROGRESS_CHECK)) {
-					new StaffCommand(p).execute(player, args);
-				}
-			}
-			if (args[0].equalsIgnoreCase("override")) {
-				if (Util.checkPermission(player, Permission.ADMIN_OVERRIDE)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket override <id> <status>");
-				}
-			}
-		}
-		if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("select")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_SELECT)) {
-					new SelectCommand(p).execute(player, args);
-				}
-			}
-			if (args[0].equalsIgnoreCase("list")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
-					new ListCommand(p).execute(player, args);
-				}
-			}
-			if (args[0].equalsIgnoreCase("change")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
-				}
-			}
-			if (args[0].equalsIgnoreCase("override")) {
-				if (Util.checkPermission(player, Permission.ADMIN_OVERRIDE)) {
-					Util.msg(player, R + "Incorrect syntax, usage: /ticket override <id> <status>");
-				}
-			}
-		}
-		if (args.length == 3) {
-			if (args[0].equalsIgnoreCase("change")) {
-				if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
-					new ChangeCommand(p).execute(player, args);
-				}
-			}
-			if (args[0].equalsIgnoreCase("override")) {
-				if (Util.checkPermission(player, Permission.ADMIN_OVERRIDE)) {
-					new OverrideCommand(p).execute(player, args);
-				}
-			}
-		}
-		if (args.length > 1) {
-			if (args[0].equalsIgnoreCase("request")) {
-				if (Util.checkPermission(player, Permission.PLAYER_REQUEST)) {
-					new RequestCommand(p).execute(player, args);
-				}
-			}
-		}
+		commands.get(sub).execute(player, args);
 	}
 
 	@Override
@@ -151,4 +83,14 @@ public class TicketCommand implements MC_Command {
 		return true;
 	}
 
+	private void loadCommands() {
+		commands.put("change", change);
+		commands.put("check", check);
+		commands.put("list", list);
+		commands.put("override", override);
+		commands.put("request", request);
+		commands.put("select", select);
+		commands.put("staff", staff);
+	}
+	
 }
