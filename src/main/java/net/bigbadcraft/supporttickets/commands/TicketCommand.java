@@ -16,26 +16,10 @@ public class TicketCommand implements MC_Command {
 	private final String R = ChatColor.RED;
 	private HashMap<String, BaseCommand> commands = new HashMap<String, BaseCommand>();
 	
-	/* Sub command instances */
-	private ChangeCommand change;
-	private CheckCommand check;
-	private ListCommand list;
-	private OverrideCommand override;
-	private RequestCommand request;
-	private SelectCommand select;
-	private StaffCommand staff;
-	
 	private MyPlugin p;
 	
 	public TicketCommand(MyPlugin plugin) {
 		p = plugin;
-		change = new ChangeCommand(p);
-		check = new CheckCommand(p);
-		list = new ListCommand(p);
-		override = new OverrideCommand(p);
-		request = new RequestCommand(p);
-		select = new SelectCommand(p);
-		staff = new StaffCommand(p);
 		loadCommands();
 	}
 	
@@ -57,6 +41,7 @@ public class TicketCommand implements MC_Command {
 	@Override
 	public List<String> getTabCompletionList(MC_Player arg0, String[] arg1) {
 		// TODO Auto-generated method stub
+		// dafuq is this
 		return null;
 	}
 
@@ -84,13 +69,13 @@ public class TicketCommand implements MC_Command {
 	}
 
 	private void loadCommands() {
-		commands.put("change", change);
-		commands.put("check", check);
-		commands.put("list", list);
-		commands.put("override", override);
-		commands.put("request", request);
-		commands.put("select", select);
-		commands.put("staff", staff);
+		commands.put("change", new ChangeCommand(p));
+		commands.put("check", new CheckCommand(p));
+		commands.put("list", new ListCommand(p));
+		commands.put("override", new OverrideCommand(p));
+		commands.put("request", new RequestCommand(p));
+		commands.put("select", new SelectCommand(p));
+		commands.put("staff", new StaffCommand(p));
 	}
 	
 }

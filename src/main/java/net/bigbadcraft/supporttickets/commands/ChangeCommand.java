@@ -19,13 +19,7 @@ public class ChangeCommand extends BaseCommand {
 	}
 	
 	public void execute(MC_Player player, String[] args) {
-		if (args.length == 1) {
-			if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
-				Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
-				return;
-			}
-		}
-		if (args.length == 2) {
+		if (args.length <= 2) {
 			if (Util.checkPermission(player, Permission.MODERATOR_CHANGE)) {
 				Util.msg(player, R + "Incorrect syntax, usage: /ticket change <id> <status>");
 				return;
