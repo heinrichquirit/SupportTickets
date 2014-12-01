@@ -13,6 +13,7 @@ public class Util {
 
 	private static final String B = ChatColor.DARK_AQUA;
 	private static final String W = ChatColor.WHITE;
+	private static final String R = ChatColor.RED;
 	
 	public static void msg(MC_Player player, String message) {
 		player.sendMessage(message);
@@ -55,7 +56,11 @@ public class Util {
 	}
 
 	public static boolean checkPermission(MC_Player player, Permission perm) {
-		return player.hasPermission(perm.toString());
+		if (!player.hasPermission(perm.toString())) {
+			msg(player, R + "You do have the required permission: " + perm.toString());
+			return false;
+		}
+		return true;
 	}
 
 	public static String join(int startingIndex, String[] args) {
