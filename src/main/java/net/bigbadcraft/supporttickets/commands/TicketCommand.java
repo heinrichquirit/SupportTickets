@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import main.java.net.bigbadcraft.supporttickets.utils.Level;
+import main.java.net.bigbadcraft.supporttickets.utils.DebugLevel;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
 import PluginReference.ChatColor;
 import PluginReference.MC_Command;
@@ -48,7 +48,7 @@ public class TicketCommand implements MC_Command {
 	@Override
 	public void handleCommand(MC_Player player, String[] args) {
 		if (player == null) {
-			Util.log(Level.INFO, "Please use this command in game.");
+			Util.log(DebugLevel.LOW, "Please use this command in game.");
 			return;
 		}
 		if (args.length <= 0) {

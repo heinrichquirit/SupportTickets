@@ -3,7 +3,7 @@ package SupportTickets;
 import main.java.net.bigbadcraft.supporttickets.QueueManager;
 import main.java.net.bigbadcraft.supporttickets.commands.TicketCommand;
 import main.java.net.bigbadcraft.supporttickets.utils.Config;
-import main.java.net.bigbadcraft.supporttickets.utils.Level;
+import main.java.net.bigbadcraft.supporttickets.utils.DebugLevel;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
 import PluginReference.MC_Server;
 import PluginReference.PluginBase;
@@ -22,14 +22,14 @@ public class MyPlugin extends PluginBase {
 	private static MC_Server server = null;
 	
 	public void onStartup(MC_Server s) {
-		Util.log(Level.INFO, "Plugin enabled.");
+		Util.log(DebugLevel.LOW, "Plugin enabled.");
 		server = s;
 		conf = new Config("config.ini");
 		server.registerCommand(new TicketCommand(this));
 	}
 	
 	public void onShutdown() {
-		Util.log(Level.INFO, "Plugin disabled.");
+		Util.log(DebugLevel.LOW, "Plugin disabled.");
 	}
 	
 	public PluginInfo getPluginInfo() {

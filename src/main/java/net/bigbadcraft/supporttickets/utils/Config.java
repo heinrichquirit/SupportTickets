@@ -37,10 +37,10 @@ public class Config {
 		try {
 			prop.store(new FileOutputStream(pluginPath), null);
 		} catch (FileNotFoundException e) {
-			Util.log(Level.SEVERE + fName + " could not be found.");
+			Util.log(DebugLevel.HIGH + fName + " could not be found.");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Util.log(Level.SEVERE + fName + " could not be saved.");
+			Util.log(DebugLevel.HIGH + fName + " could not be saved.");
 			e.printStackTrace();
 		}
 	}

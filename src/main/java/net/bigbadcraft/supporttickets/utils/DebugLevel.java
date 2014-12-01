@@ -1,12 +1,12 @@
 package main.java.net.bigbadcraft.supporttickets.utils;
 
-public enum Level {
+public enum DebugLevel {
 
-	FINE("FINE"), INFO("INFO"), WARNING("WARNING"), SEVERE("SEVERE");
+	LOW("LOW"), MEDIUM("MEDIUM"), HIGH("HIGH");
 	
 	private final String level;
 	
-	Level(final String level) {
+	DebugLevel(final String level) {
 		this.level = level;
 	}
 	
