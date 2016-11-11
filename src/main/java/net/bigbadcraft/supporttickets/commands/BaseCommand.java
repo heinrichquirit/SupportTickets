@@ -1,9 +1,9 @@
 package main.java.net.bigbadcraft.supporttickets.commands;
 
-import PluginReference.MC_Player;
+import org.bukkit.entity.Player;
 
 public abstract class BaseCommand {
 
-	public abstract void execute(MC_Player player, String[] args);
+	public abstract void execute(Player player, String[] args);
 	
 }

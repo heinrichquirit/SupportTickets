@@ -5,22 +5,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.logging.Level;
 
-import PluginReference.ChatColor;
-import PluginReference.MC_Player;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public class Util {
 
-	private static final String B = ChatColor.DARK_AQUA;
-	private static final String W = ChatColor.WHITE;
-	private static final String R = ChatColor.RED;
+	private static final ChatColor B = ChatColor.DARK_AQUA;
+	private static final ChatColor W = ChatColor.WHITE;
+	private static final ChatColor R = ChatColor.RED;
 	
 	/**
 	 * Send a player message to player
 	 * @param player player to send to
 	 * @param message message to send
 	 */
-	public static void msg(MC_Player player, String message) {
+	public static void msg(Player player, String message) {
 		player.sendMessage(message);
 	}
 
@@ -37,7 +38,7 @@ public class Util {
 	 * @param level the type of message
 	 * @param message the message to send
 	 */
-	public static void log(DebugLevel level, String message) {
+	public static void log(Level level, String message) {
 		System.out.println("[SupportTickets] (" + level + ") - " + message);
 	}
 
@@ -74,9 +75,9 @@ public class Util {
 		if (!f.exists()) {
 			try {
 				f.createNewFile();
-				log(DebugLevel.LOW, f.getName() + " successfully created.");
+				log(Level.INFO, f.getName() + " successfully created.");
 			} catch (IOException e) {
-				log(DebugLevel.HIGH, f.getName() + " could not be created.");
+				log(Level.WARNING, f.getName() + " could not be created.");
 				e.printStackTrace(); // So they notice
 			}
 		}
@@ -88,7 +89,7 @@ public class Util {
 	 * @param perm the permission they require
 	 * @return true if player has specified permission
 	 */
-	public static boolean checkPermission(MC_Player player, Permission perm) {
+	public static boolean checkPermission(Player player, Permission perm) {
 		if (!player.hasPermission(perm.toString())) {
 			msg(player, R + "You do have the required permission: " + perm.toString());
 			return false;
@@ -143,7 +144,7 @@ public class Util {
 	 * Send player command menu
 	 * @param player the player to send to
 	 */
-	public static void sendHelpMenu(MC_Player player) {
+	public static void sendHelpMenu(Player player) {
 		msg(player, "Here are the " + B + "available" + W + " commands.");
 		for (Permission permission : getPluginPermissions()) {
 			if (player.hasPermission(permission.toString())) {

@@ -1,23 +1,24 @@
 package main.java.net.bigbadcraft.supporttickets.commands;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import main.java.net.bigbadcraft.supporttickets.QueueManager;
+import main.java.net.bigbadcraft.supporttickets.SupportTickets;
 import main.java.net.bigbadcraft.supporttickets.utils.Permission;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
-import PluginReference.ChatColor;
-import PluginReference.MC_Player;
-import SupportTickets.MyPlugin;
 
 public class SelectCommand extends BaseCommand {
 
-	private MyPlugin p;
+	private SupportTickets p;
 	private QueueManager q;
 	
-	public SelectCommand(MyPlugin plugin) {
+	public SelectCommand(SupportTickets plugin) {
 		p = plugin;
 		q = p.queue;
 	}
 	
-	public void execute(MC_Player player, String[] args) {
+	public void execute(Player player, String[] args) {
 		if (args.length == 1) {
 			if (Util.checkPermission(player, Permission.MODERATOR_SELECT)) {
 				Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket select <id>");

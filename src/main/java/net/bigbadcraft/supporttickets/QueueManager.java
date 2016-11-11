@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import main.java.net.bigbadcraft.supporttickets.utils.TicketStatus;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
-import PluginReference.ChatColor;
-import PluginReference.MC_Player;
 
 public class QueueManager {
 
-	private final String B = ChatColor.DARK_AQUA;
-	private final String W = ChatColor.WHITE;
+	private final ChatColor B = ChatColor.DARK_AQUA;
+	private final ChatColor W = ChatColor.WHITE;
 	
 	private List<Ticket> tickets = new ArrayList<Ticket>();
 	private List<Ticket> pendingTickets = new ArrayList<Ticket>();
@@ -44,7 +45,7 @@ public class QueueManager {
 		return tickets.contains(tickets.get(ticketId));
 	}
 	
-	public void handleTicket(int ticketId, MC_Player staff) {
+	public void handleTicket(int ticketId, Player staff) {
 		if (contains(ticketId)) {
 			Ticket t = getQueuedTicket(ticketId);
 			t.setHandler(staff.getName());
@@ -53,7 +54,7 @@ public class QueueManager {
 		}
 	}
 	
-	public void displayTickets(MC_Player player) {
+	public void displayTickets(Player player) {
 		Util.msg(player, W + "---------- " + B + "SupportTickets " + W + " (" + B + tickets.size() + W + ") ----------");
 		for (Ticket t : tickets) {
 			player.sendMessage(W + "(" + B + t.getId() + W +") " + t.getRequester() + ": " + t.getMessage());
@@ -85,7 +86,7 @@ public class QueueManager {
 		return ticket;
 	}
 	
-	public List<Ticket> getPlayerTickets(MC_Player player) {
+	public List<Ticket> getPlayerTickets(Player player) {
 		List<Ticket> temp = new ArrayList<Ticket>();
 		for (Ticket t : tickets) {
 			if (t.getRequester().equals(player.getName())) {
@@ -98,7 +99,7 @@ public class QueueManager {
 		return temp;
 	}
 	
-	public boolean hasTicket(MC_Player player) {
+	public boolean hasTicket(Player player) {
 		return getPlayerTickets(player).size() > 0;
 	}
 	
@@ -106,14 +107,14 @@ public class QueueManager {
 		return tickets.size();
 	}
 	
-	public int getTotalTickets(MC_Player player) {
+	public int getTotalTickets(Player player) {
 		return getPlayerTickets(player).size();
 	}
 	
 	/*
 	 * Gets the player's earliest ticket id
 	 */
-	public int getEarly(MC_Player player) {
+	public int getEarly(Player player) {
 		List<Integer> ids = new ArrayList<Integer>();
 		for (Ticket t : getPlayerTickets(player)) {
 			ids.add(t.getId());
@@ -124,7 +125,7 @@ public class QueueManager {
 	/*
 	 * Gets the player's latest ticket id
 	 */
-	public int getLate(MC_Player player) {
+	public int getLate(Player player) {
 		List<Integer> ids = new ArrayList<Integer>();
 		for (Ticket t : getPlayerTickets(player)) {
 			ids.add(t.getId());
@@ -136,7 +137,7 @@ public class QueueManager {
 		return tickets.size();
 	}
 	
-	public void showDetails(MC_Player player, int ticketId) {
+	public void showDetails(Player player, int ticketId) {
 		player.sendMessage(W + "---------- " + B + "SupportTickets" + W + "[" + B + "ID: " + ticketId + W + "] ----------");
 		Ticket t = getQueuedTicket(ticketId);
 		player.sendMessage(B + "Requester" + W + ": " + t.getRequester());
@@ -145,7 +146,7 @@ public class QueueManager {
 		player.sendMessage(B + "Status: " + W + ": " + t.getStatus());
 	}
 	
-	public void showTickets(MC_Player player, TicketStatus status) {
+	public void showTickets(Player player, TicketStatus status) {
 		List<Ticket> filter = new ArrayList<Ticket>();
 		for (Ticket t : tickets) {
 			if (t.getStatus() == status) {
@@ -172,7 +173,7 @@ public class QueueManager {
 	
 	/* Methods for pendingTickets list */
 	
-	public void pendTicket(MC_Player player, int ticketId) {
+	public void pendTicket(Player player, int ticketId) {
 		Ticket t = getQueuedTicket(ticketId);
 		pend(t);
 		t.setHandler(player.getName());
@@ -180,7 +181,7 @@ public class QueueManager {
 		Util.msg(player, "You are now handling " + B + t.getRequester() + "'s " + W + "ticket."); 
 	}
 	
-	public void changeStatus(MC_Player staff, Ticket ticket, TicketStatus status) {
+	public void changeStatus(Player staff, Ticket ticket, TicketStatus status) {
 		switch(status) {
 		case OPEN:
 			ticket.setStatus(status);

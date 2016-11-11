@@ -1,21 +1,22 @@
 package main.java.net.bigbadcraft.supporttickets.commands;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import main.java.net.bigbadcraft.supporttickets.SupportTickets;
 import main.java.net.bigbadcraft.supporttickets.utils.Permission;
 import main.java.net.bigbadcraft.supporttickets.utils.TicketStatus;
 import main.java.net.bigbadcraft.supporttickets.utils.Util;
-import PluginReference.ChatColor;
-import PluginReference.MC_Player;
-import SupportTickets.MyPlugin;
 
 public class ListCommand extends BaseCommand {
 
-	private MyPlugin p;
+	private SupportTickets p;
 	
-	public ListCommand(MyPlugin plugin) {
+	public ListCommand(SupportTickets plugin) {
 		p = plugin;
 	}
 	
-	public void execute(MC_Player player, String[] args) {
+	public void execute(Player player, String[] args) {
 		if (args.length == 1) {
 			if (Util.checkPermission(player, Permission.MODERATOR_LIST)) {
 				Util.msg(player, ChatColor.RED + "Incorrect syntax, usage: /ticket list <Open|Pending|Re-Opened|Closed>");
